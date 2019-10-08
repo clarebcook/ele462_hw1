@@ -1,0 +1,47 @@
+// Generated for: spectre
+// Generated on: Oct  8 03:11:10 2019
+// Design library name: ele462
+// Design cell name: HW1_4_DC
+// Design view name: schematic
+simulator lang=spectre
+global 0
+parameters vdd=1.2
+include "/n/homeserver2/eehome2a/PUBLIC_HTML/nverma/cadenceSetup_6.1.7/gpdk090_v4.4/libs.oa22/gpdk090/../../models/spectre/gpdk090.scs" section=NN
+
+// Library name: ele462
+// Cell name: HW1_4
+// View name: av_extracted
+subckt HW1_4_av_extracted A VDD Z gnd
+    c1 (net2 0) capacitor c=3.12777e-16
+    c2 (net4 0) capacitor c=2.93644e-16
+    c3 (net3 0) capacitor c=1.83505e-16
+    PM0 (net3 net2 net4 net4) gpdk090_pmos1v w=2.4e-07 l=1e-07 as=6.72e-14 \
+        ad=6.72e-14 ps=1.04e-06 pd=1.04e-06 m=(1)*(1) simM=(1)*(1)
+    NM0 (net3 net2 0 0) gpdk090_nmos1v w=1.2e-07 l=1e-07 as=6.96e-14 \
+        ad=6.96e-14 ps=1.16e-06 pd=1.16e-06 m=(1)*(1) simM=(1)*(1)
+ends HW1_4_av_extracted
+// End of subcircuit definition.
+
+// Library name: ele462
+// Cell name: HW1_4_DC
+// View name: schematic
+I2 (net03 net02 net011 0) HW1_4_av_extracted
+V0 (net02 0) vsource dc=vdd type=dc
+C0 (net011 0) capacitor c=3f 
+V1 (net03 0) vsource dc=0 type=pulse val0=0 val1=vdd period=20n delay=5n \
+        rise=30.00p fall=30.00p width=9.9n
+simulatorOptions options reltol=1e-3 vabstol=1e-6 iabstol=1e-12 temp=27 \
+    tnom=27 scalem=1.0 scale=1.0 gmin=1e-12 rforce=1 maxnotes=5 maxwarns=5 \
+    digits=5 cols=80 pivrel=1e-3 sensfile="../psf/sens.output" \
+    checklimitdest=psf 
+tran tran stop=80n write="spectre.ic" writefinal="spectre.fc" \
+    annotate=status maxiters=5 
+finalTimeOP info what=oppoint where=rawfile
+modelParameter info what=models where=rawfile
+element info what=inst where=rawfile
+outputParameter info what=output where=rawfile
+designParamVals info what=parameters where=rawfile
+primitives info what=primitives where=rawfile
+subckts info what=subckts where=rawfile
+save I2:4 net03 
+saveOptions options save=allpub
